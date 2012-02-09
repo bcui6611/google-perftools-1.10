@@ -1,6 +1,7 @@
 # Hard coded Makefile for windows
 
 CC = x86_64-w64-mingw32-gcc
+
 CXX = x86_64-w64-mingw32-g++
 
 TCMALLOC_FLAGS =
@@ -25,7 +26,7 @@ LIBTCMALLOC = $(TCLIB)/libtcmalloc_minimal.a \
 BINARIES= test.exe
 
 LIB=$(LOCALLIB) 
-INCLUDE= -Iwin32 
+INCLUDE= -Iwin32
 CPPFLAGS= $(MARCH) -g -DHAVE_CONFIG_H ${INCLUDE} -Wall 
 
 all: ${BINARIES}
@@ -42,10 +43,11 @@ CXXFLAGS = -std=gnu++0x \
            -Wno-long-long  -Wmissing-declarations -Wno-redundant-decls \
 		   $(TCMALLOC_FLAGS)
 
-TEST_C_SRC = \
-           test.c \
-		  
-TEST_OBJS = ${TEST_C_SRC:%.c=%.o}
+TEST_CC_SRC = \
+           test.cc \
+           lock.cc
+		   
+TEST_OBJS = ${TEST_CC_SRC:%.cc=%.o}
 
 
 test.exe: ${TEST_OBJS}
@@ -60,7 +62,6 @@ test.exe: ${TEST_OBJS}
 	${COMPILE.c} -MMD $< -o $@
 
 clean:
-	$(RM) ${TEST_OBJS} ${BINARIES} ${TEST_OBJS:.o=.d} \
-              ${GENFILES} ${SQLITE3_OBJS} ${SQLITE3_OBJS:.o=.d}
+	$(RM) ${TEST_OBJS} ${BINARIES} ${TEST_OBJS:.o=.d}
 
 -include ${TEST_OBJS:.o=.d}
